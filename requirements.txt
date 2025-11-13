@@ -1,0 +1,13 @@
+python-dotenv
+neo4j
+sdv
+pyarrow
+duckdb
+streamlit
+openai
+xgboost
+langchain_community
+langchain_openai
+networkx
+pyvis
+shap

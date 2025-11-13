@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 350px;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "white"}, "id": "C840083671", "label": "C840083671", "shape": "dot", "size": 10, "title": "Account: C840083671\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1420196421", "label": "C1420196421", "shape": "dot", "size": 10, "title": "Account: C1420196421\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C2101527076", "label": "C2101527076", "shape": "dot", "size": 10, "title": "Account: C2101527076\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C137533655", "label": "C137533655", "shape": "dot", "size": 10, "title": "Account: C137533655\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1118430673", "label": "C1118430673", "shape": "dot", "size": 10, "title": "Account: C1118430673\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C749981943", "label": "C749981943", "shape": "dot", "size": 10, "title": "Account: C749981943\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1334405552", "label": "C1334405552", "shape": "dot", "size": 10, "title": "Account: C1334405552\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C467632528", "label": "C467632528", "shape": "dot", "size": 10, "title": "Account: C467632528\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1364127192", "label": "C1364127192", "shape": "dot", "size": 10, "title": "Account: C1364127192\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1635772897", "label": "C1635772897", "shape": "dot", "size": 10, "title": "Account: C1635772897\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C669700766", "label": "C669700766", "shape": "dot", "size": 10, "title": "Account: C669700766\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1275464847", "label": "C1275464847", "shape": "dot", "size": 10, "title": "Account: C1275464847\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C13692003", "label": "C13692003", "shape": "dot", "size": 10, "title": "Account: C13692003\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1872047468", "label": "C1872047468", "shape": "dot", "size": 10, "title": "Account: C1872047468\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1499825229", "label": "C1499825229", "shape": "dot", "size": 10, "title": "Account: C1499825229\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1093223281", "label": "C1093223281", "shape": "dot", "size": 10, "title": "Account: C1093223281\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C77163673", "label": "C77163673", "shape": "dot", "size": 10, "title": "Account: C77163673\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1440057381", "label": "C1440057381", "shape": "dot", "size": 10, "title": "Account: C1440057381\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C430329518", "label": "C430329518", "shape": "dot", "size": 10, "title": "Account: C430329518\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C140702728", "label": "C140702728", "shape": "dot", "size": 10, "title": "Account: C140702728\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C395257482", "label": "C395257482", "shape": "dot", "size": 10, "title": "Account: C395257482\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1375503918", "label": "C1375503918", "shape": "dot", "size": 10, "title": "Account: C1375503918\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C175961135", "label": "C175961135", "shape": "dot", "size": 10, "title": "Account: C175961135\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1134864869", "label": "C1134864869", "shape": "dot", "size": 10, "title": "Account: C1134864869\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1984954272", "label": "C1984954272", "shape": "dot", "size": 10, "title": "Account: C1984954272\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1247938090", "label": "C1247938090", "shape": "dot", "size": 10, "title": "Account: C1247938090\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C2126545173", "label": "C2126545173", "shape": "dot", "size": 10, "title": "Account: C2126545173\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C7162498", "label": "C7162498", "shape": "dot", "size": 10, "title": "Account: C7162498\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C351297720", "label": "C351297720", "shape": "dot", "size": 10, "title": "Account: C351297720\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C2047521920", "label": "C2047521920", "shape": "dot", "size": 10, "title": "Account: C2047521920\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C2044690596", "label": "C2044690596", "shape": "dot", "size": 10, "title": "Account: C2044690596\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C540962910", "label": "C540962910", "shape": "dot", "size": 10, "title": "Account: C540962910\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C2026325575", "label": "C2026325575", "shape": "dot", "size": 10, "title": "Account: C2026325575\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C17222024", "label": "C17222024", "shape": "dot", "size": 10, "title": "Account: C17222024\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C556223230", "label": "C556223230", "shape": "dot", "size": 10, "title": "Account: C556223230\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1844941220", "label": "C1844941220", "shape": "dot", "size": 10, "title": "Account: C1844941220\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1699873763", "label": "C1699873763", "shape": "dot", "size": 10, "title": "Account: C1699873763\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1409933277", "label": "C1409933277", "shape": "dot", "size": 10, "title": "Account: C1409933277\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1174000532", "label": "C1174000532", "shape": "dot", "size": 10, "title": "Account: C1174000532\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C383882703", "label": "C383882703", "shape": "dot", "size": 10, "title": "Account: C383882703\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C840095827", "label": "C840095827", "shape": "dot", "size": 10, "title": "Account: C840095827\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1775746074", "label": "C1775746074", "shape": "dot", "size": 10, "title": "Account: C1775746074\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C213063852", "label": "C213063852", "shape": "dot", "size": 10, "title": "Account: C213063852\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C2025652936", "label": "C2025652936", "shape": "dot", "size": 10, "title": "Account: C2025652936\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C685428529", "label": "C685428529", "shape": "dot", "size": 10, "title": "Account: C685428529\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C864622150", "label": "C864622150", "shape": "dot", "size": 10, "title": "Account: C864622150\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1004271827", "label": "C1004271827", "shape": "dot", "size": 10, "title": "Account: C1004271827\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C457596841", "label": "C457596841", "shape": "dot", "size": 10, "title": "Account: C457596841\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C682812632", "label": "C682812632", "shape": "dot", "size": 10, "title": "Account: C682812632\u003cbr\u003eSuspicious Txns: 1", "value": 1}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1305486145", "label": "C1305486145", "shape": "dot", "size": 10, "title": "Account: C1305486145\u003cbr\u003eSuspicious Txns: 1", "value": 1}]);
+                  edges = new vis.DataSet([]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

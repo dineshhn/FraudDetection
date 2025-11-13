@@ -1,0 +1,258 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 400px;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+             #loadingBar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width: 100%;
+                 height: 400px;
+                 background-color:rgba(200,200,200,0.8);
+                 -webkit-transition: all 0.5s ease;
+                 -moz-transition: all 0.5s ease;
+                 -ms-transition: all 0.5s ease;
+                 -o-transition: all 0.5s ease;
+                 transition: all 0.5s ease;
+                 opacity:1;
+             }
+
+             #bar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width:20px;
+                 height:20px;
+                 margin:auto auto auto auto;
+                 border-radius:11px;
+                 border:2px solid rgba(30,30,30,0.05);
+                 background: rgb(0, 173, 246); /* Old browsers */
+                 box-shadow: 2px 0px 4px rgba(0,0,0,0.4);
+             }
+
+             #border {
+                 position:absolute;
+                 top:10px;
+                 left:10px;
+                 width:500px;
+                 height:23px;
+                 margin:auto auto auto auto;
+                 box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
+                 border-radius:10px;
+             }
+
+             #text {
+                 position:absolute;
+                 top:8px;
+                 left:530px;
+                 width:30px;
+                 height:50px;
+                 margin:auto auto auto auto;
+                 font-size:22px;
+                 color: #000000;
+             }
+
+             div.outerBorder {
+                 position:relative;
+                 top:400px;
+                 width:600px;
+                 height:44px;
+                 margin:auto auto auto auto;
+                 border:8px solid rgba(0,0,0,0.1);
+                 background: rgb(252,252,252); /* Old browsers */
+                 background: -moz-linear-gradient(top,  rgba(252,252,252,1) 0%, rgba(237,237,237,1) 100%); /* FF3.6+ */
+                 background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(252,252,252,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
+                 background: -webkit-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
+                 background: -o-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Opera 11.10+ */
+                 background: -ms-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* IE10+ */
+                 background: linear-gradient(to bottom,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* W3C */
+                 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+                 border-radius:72px;
+                 box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+             }
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+            <div id="loadingBar">
+              <div class="outerBorder">
+                <div id="text">0%</div>
+                <div id="border">
+                  <div id="bar"></div>
+                </div>
+              </div>
+            </div>
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "white"}, "id": "C978065049", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C655381473", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1314130140", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C824589210", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1377753996", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C2076202873", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C775626239", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1133027714", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C832342153", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C496802778", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C392064605", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C718545417", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C298124521", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C204172480", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C286547351", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1216420274", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1281244800", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C576940192", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C254959466", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C968566240", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C955636031", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1886435655", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C2049214765", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1064397217", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C2062778972", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1393899702", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C981358218", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1371013127", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C213020139", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C839099566", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1495678843", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1746061516", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1398479590", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C659763564", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1825811850", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1054913783", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1332150216", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C947462790", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1247866422", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C2064883371", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C837073696", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C460570271", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "M1653361344", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C788905599", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "M1678709153", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1958592872", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "M1682733268", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C260084831", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "M267814113", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1714378342", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "M265824587", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C369805307", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "M314562573", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C38603201", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "M1422273905", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C2059592603", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "M2016828666", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1121814939", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1254526270", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1816415168", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C275358519", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C921633075", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C365643423", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C697943573", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1772297332", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1543115339", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C730211394", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C2066851715", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1700461319", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1074409068", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C119359821", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C483724654", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C2019975774", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1686303850", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C911250070", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1511232699", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1975153199", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1307125137", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C280615803", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C2142893855", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C807240950", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1399215965", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1937060646", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C629230908", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1652045594", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1806194957", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C976341964", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C989803579", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C317979252", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C622265710", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1445382686", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C244170982", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1149532060", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C377500286", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C502900737", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C2085417116", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1642710793", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1768957697", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C502781364", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C768423200", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1347954228", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1567939853", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1235756307", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1839953480", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C102080927", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C353695877", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C817140745", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1263647646", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C2056651471", "label": "Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "C1010227805", "label": "Account", "shape": "dot", "size": 10}]);
+                  edges = new vis.DataSet([{"arrows": "to", "color": "#03fc7f", "from": "C978065049", "label": "CASH_IN | $268244.57", "to": "C655381473", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C1314130140", "label": "CASH_IN | $80264.25", "to": "C655381473", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C824589210", "label": "CASH_OUT | $156222.9", "to": "C655381473", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C1377753996", "label": "TRANSFER | $276084.37", "to": "C655381473", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C2076202873", "label": "TRANSFER | $730053.28", "to": "C655381473", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C775626239", "label": "CASH_IN | $6183.21", "to": "C655381473", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C1133027714", "label": "CASH_OUT | $129023.4", "to": "C655381473", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C832342153", "label": "CASH_IN | $333554.98", "to": "C655381473", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C496802778", "label": "CASH_IN | $58723.2", "to": "C655381473", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C392064605", "label": "CASH_IN | $179911.65", "to": "C655381473", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C718545417", "label": "CASH_OUT | $138481.68", "to": "C655381473", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C298124521", "label": "CASH_IN | $113898.06", "to": "C655381473", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C204172480", "label": "CASH_OUT | $62699.83", "to": "C655381473", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C286547351", "label": "CASH_OUT | $392940.7", "to": "C655381473", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C1216420274", "label": "CASH_IN | $260104.08", "to": "C655381473", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C1281244800", "label": "CASH_IN | $86553.53", "to": "C655381473", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C576940192", "label": "CASH_OUT | $251018.42", "to": "C655381473", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C254959466", "label": "CASH_IN | $88564.14", "to": "C655381473", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C968566240", "label": "TRANSFER | $914773.08", "to": "C655381473", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C955636031", "label": "CASH_OUT | $49860.48", "to": "C655381473", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C1886435655", "label": "CASH_OUT | $72914.97", "to": "C655381473", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C2049214765", "label": "CASH_OUT | $233807.51", "to": "C655381473", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C1064397217", "label": "CASH_IN | $187968.8", "to": "C655381473", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C2062778972", "label": "TRANSFER | $450943.38", "to": "C655381473", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C1393899702", "label": "CASH_OUT | $48837.91", "to": "C655381473", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C981358218", "label": "TRANSFER | $766776.72", "to": "C655381473", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C1371013127", "label": "CASH_IN | $1845.95", "to": "C655381473", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C213020139", "label": "DEBIT | $6427.14", "to": "C655381473", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C839099566", "label": "CASH_IN | $49378.84", "to": "C655381473", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C1495678843", "label": "CASH_IN | $133663.18", "to": "C655381473", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C1746061516", "label": "CASH_IN | $85955.62", "to": "C655381473", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C1398479590", "label": "DEBIT | $1046.5", "to": "C655381473", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C659763564", "label": "CASH_IN | $73309.71", "to": "C655381473", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C1825811850", "label": "TRANSFER | $132513.7", "to": "C655381473", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C1054913783", "label": "CASH_OUT | $48899.07", "to": "C655381473", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C1332150216", "label": "CASH_IN | $122464.68", "to": "C655381473", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C947462790", "label": "TRANSFER | $104267.94", "to": "C655381473", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C1247866422", "label": "CASH_OUT | $94527.39", "to": "C655381473", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C2064883371", "label": "DEBIT | $5297.36", "to": "C655381473", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C837073696", "label": "DEBIT | $6666.78", "to": "C655381473", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C460570271", "label": "PAYMENT | $2641.47", "to": "M1653361344", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C788905599", "label": "PAYMENT | $8948.03", "to": "M1678709153", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C1958592872", "label": "PAYMENT | $619.24", "to": "M1682733268", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C260084831", "label": "PAYMENT | $7823.46", "to": "M267814113", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C1714378342", "label": "PAYMENT | $5655.17", "to": "M265824587", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C369805307", "label": "PAYMENT | $8531.42", "to": "M314562573", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C38603201", "label": "PAYMENT | $8.73", "to": "M1422273905", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C2059592603", "label": "PAYMENT | $1084.9", "to": "M2016828666", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C1121814939", "label": "CASH_OUT | $256344.54", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C1816415168", "label": "CASH_IN | $222088.25", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C275358519", "label": "CASH_OUT | $403814.4", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C921633075", "label": "TRANSFER | $424266.88", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C365643423", "label": "CASH_OUT | $218952.66", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C697943573", "label": "CASH_IN | $273538.96", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C1772297332", "label": "TRANSFER | $1407952.67", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C1543115339", "label": "CASH_IN | $443309.79", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C730211394", "label": "CASH_OUT | $77206.77", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C2066851715", "label": "CASH_OUT | $71067.91", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C1700461319", "label": "CASH_IN | $218036.58", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C1074409068", "label": "CASH_OUT | $73370.71", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C119359821", "label": "TRANSFER | $233367.49", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C483724654", "label": "CASH_OUT | $214635.15", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C2019975774", "label": "CASH_OUT | $13029.4", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C1686303850", "label": "CASH_OUT | $38819.07", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C911250070", "label": "CASH_IN | $703326.99", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C1511232699", "label": "CASH_OUT | $208255.88", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C1975153199", "label": "CASH_IN | $173941.29", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C1307125137", "label": "TRANSFER | $303077.75", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C280615803", "label": "DEBIT | $4510.22", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C2142893855", "label": "CASH_OUT | $9864.23", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C807240950", "label": "CASH_IN | $33244.29", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C1399215965", "label": "TRANSFER | $248826.61", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C1937060646", "label": "CASH_IN | $117372.63", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C629230908", "label": "TRANSFER | $255588.22", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C1652045594", "label": "TRANSFER | $241160.57", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C1806194957", "label": "CASH_IN | $148825.97", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C976341964", "label": "CASH_OUT | $316543.72", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C989803579", "label": "CASH_OUT | $67322.15", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C317979252", "label": "CASH_IN | $30875.73", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C622265710", "label": "CASH_IN | $449547.19", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C1445382686", "label": "TRANSFER | $152398.58", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C244170982", "label": "CASH_OUT | $340664.76", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C1149532060", "label": "CASH_OUT | $233978.07", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C377500286", "label": "CASH_OUT | $587898.61", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C502900737", "label": "CASH_OUT | $177054.93", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C2085417116", "label": "CASH_IN | $200378.56", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C1642710793", "label": "CASH_IN | $187629.25", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C1768957697", "label": "TRANSFER | $1129382.19", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C502781364", "label": "TRANSFER | $727267.9", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C768423200", "label": "CASH_OUT | $53478.52", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C1347954228", "label": "CASH_IN | $43824.93", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C1567939853", "label": "TRANSFER | $2230082.48", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C1235756307", "label": "CASH_OUT | $73622.44", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C1839953480", "label": "TRANSFER | $145121.43", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C102080927", "label": "CASH_OUT | $285846.68", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C353695877", "label": "CASH_IN | $348234.4", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C817140745", "label": "CASH_OUT | $91858.73", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C1263647646", "label": "CASH_IN | $42736.2", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C2056651471", "label": "CASH_OUT | $334322.86", "to": "C1254526270", "width": 1}, {"arrows": "to", "color": "#03fc7f", "from": "C1010227805", "label": "DEBIT | $6552.04", "to": "C1254526270", "width": 1}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "repulsion": {
+            "centralGravity": 0.33,
+            "damping": 0.95,
+            "nodeDistance": 200,
+            "springConstant": 0.1,
+            "springLength": 100
+        },
+        "solver": "repulsion",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+                      network.on("stabilizationProgress", function(params) {
+                          document.getElementById('loadingBar').removeAttribute("style");
+                          var maxWidth = 496;
+                          var minWidth = 20;
+                          var widthFactor = params.iterations/params.total;
+                          var width = Math.max(minWidth,maxWidth * widthFactor);
+                          document.getElementById('bar').style.width = width + 'px';
+                          document.getElementById('text').innerHTML = Math.round(widthFactor*100) + '%';
+                      });
+                      network.once("stabilizationIterationsDone", function() {
+                          document.getElementById('text').innerHTML = '100%';
+                          document.getElementById('bar').style.width = '496px';
+                          document.getElementById('loadingBar').style.opacity = 0;
+                          // really clean the dom element
+                          setTimeout(function () {document.getElementById('loadingBar').style.display = 'none';}, 500);
+                      });
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
