@@ -49,6 +49,6 @@ Run the following python scripts
 2. python .\convert2parquet.py : To convert CSV data to Parquet format
 3. python .\load.py : To load data into Neo4j from csv files [creates nodes and relationships]
 4. python .\ML\classicalML.py : Creates job.lib file for classical ML model [to be used in main script]
-5. python .\st3.py : Main script to interact with Neo4j and get responses using RAG/LLM approach.
+5. streamlit run .\st3.py : Main script to interact with Neo4j and get responses using RAG/LLM approach.
 
 
